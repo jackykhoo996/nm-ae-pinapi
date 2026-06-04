@@ -8,6 +8,16 @@ const supabase = createClient(
 export default async function handler(req, res) {
   try {
 
+      console.log(
+      "SUPABASE_URL =",
+      process.env.SUPABASE_URL
+    );
+
+    console.log(
+      "SERVICE_KEY EXISTS =",
+      !!process.env.SUPABASE_SERVICE_KEY
+    );
+
     const {
       msisdn,
       click_id = "test_click"
@@ -37,17 +47,28 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    await supabase
-      .from("leads")
-      .insert({
-        click_id,
-        msisdn,
-        carrier: "Etisalat",
-        country: "UAE",
-        request_id: data.request_id || null,
-        status: data.status || "UNKNOWN",
-        pin_response: data
-      });
+  const { data: insertResult, error: insertError } =
+  await supabase
+    .from("leads")
+    .insert({
+      click_id,
+      msisdn,
+      carrier: "Etisalat",
+      country: "UAE",
+      request_id: data.request_id || null,
+      status: data.status || "UNKNOWN",
+      pin_response: data
+    });
+
+console.log("SUPABASE INSERT RESULT:", insertResult);
+
+console.log("SUPABASE INSERT ERROR:", insertError);
+
+if (insertError) {
+  return res.status(500).json({
+    supabase_error: insertError
+  });
+}
 
     return res.status(200).json(data);
 
