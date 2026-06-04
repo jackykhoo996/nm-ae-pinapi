@@ -13,9 +13,21 @@ export default async function handler(req, res) {
       request_id
     } = req.body || {};
 
-    if (!msisdn || !pin_code || !request_id) {
+    if (!msisdn) {
       return res.status(400).json({
-        error: "msisdn, pin_code and request_id are required"
+        error: "msisdn required"
+      });
+    }
+
+    if (!pin_code) {
+      return res.status(400).json({
+        error: "pin_code required"
+      });
+    }
+
+    if (!request_id) {
+      return res.status(400).json({
+        error: "request_id required"
       });
     }
 
@@ -28,27 +40,52 @@ export default async function handler(req, res) {
       `&keyword=gd` +
       `&telco=etisalat` +
       `&action=pin_verify` +
-      `&msisdn=${msisdn}` +
+      `&msisdn=${encodeURIComponent(msisdn)}` +
       `&country=uae` +
       `&lang=en` +
-      `&pin_code=${pin_code}` +
-      `&request_id=${request_id}`;
+      `&pin_code=${encodeURIComponent(pin_code)}` +
+      `&request_id=${encodeURIComponent(request_id)}`;
+
+    console.log("VERIFY URL:", apiUrl);
 
     const response = await fetch(apiUrl);
-    const data = await response.json();
 
-    const { error } = await supabase
+    const rawResponse = await response.text();
+
+    console.log(
+      "PURETECH VERIFY RAW RESPONSE:",
+      rawResponse
+    );
+
+    let verifyData = {};
+
+    try {
+      verifyData = JSON.parse(rawResponse);
+    } catch (err) {
+      return res.status(500).json({
+        parse_error: err.message,
+        raw_response: rawResponse
+      });
+    }
+
+    const { error: updateError } = await supabase
       .from("leads")
       .update({
-        status: data.status || "UNKNOWN",
-        verify_response: data
+        status: verifyData.status || "UNKNOWN",
+        verify_response: verifyData
       })
       .eq("request_id", request_id);
 
-    console.log("VERIFY RESPONSE:", data);
-    console.log("SUPABASE ERROR:", error);
+    console.log(
+      "SUPABASE UPDATE ERROR:",
+      updateError
+    );
 
-    return res.status(200).json(data);
+    return res.status(200).json({
+      success: true,
+      verify_response: verifyData,
+      supabase_error: updateError
+    });
 
   } catch (err) {
     console.error(err);
