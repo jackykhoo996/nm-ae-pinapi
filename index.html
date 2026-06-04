@@ -1,81 +1,439 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl" id="htmlTag">
 <head>
-<meta charset="UTF-8">
-<title>Gameonz UAE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gameonz UAE</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
 
-<style>
+        body {
+            background: #0b071a;
+            background-image: 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,0.3) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,0.2) 0, transparent 50%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+            overflow-x: hidden;
+        }
 
-body{
-    font-family:Arial;
-    max-width:500px;
-    margin:40px auto;
-    padding:20px;
-}
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(13, 9, 31, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 30px 20px 24px 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+            backdrop-filter: blur(20px);
+            position: relative;
+            margin-bottom: 30px;
+        }
 
-input{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-}
+        /* 右上角多语言切换按钮 */
+        .lang-switcher {
+            position: absolute;
+            top: 15px;
+            left: 15px; 
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #00ffaa;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 100;
+        }
+        [dir="ltr"] .lang-switcher {
+            left: auto;
+            right: 15px;
+        }
+        .lang-switcher:hover {
+            background: rgba(0, 255, 170, 0.15);
+            border-color: #00ffaa;
+        }
 
-button{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-}
+        /* 顶部 Service Logo */
+        .logo-container {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
 
-#verifySection{
-    display:none;
-}
+        .service-logo {
+            max-width: 160px;
+            height: auto;
+            object-fit: contain;
+        }
 
-pre{
-    background:#f5f5f5;
-    padding:10px;
-    overflow:auto;
-}
+        /* 徽章区布局 */
+        .hero-showcase {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 10px 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-</style>
+        /* 纯 CSS 霓虹发光电竞芯片徽章 - 永不破损 */
+        .cyber-badge {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1f1245 0%, #0d0626 100%);
+            border: 3px solid #00ffaa;
+            border-radius: 20px;
+            margin-bottom: 18px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 255, 170, 0.4), inset 0 0 15px rgba(0, 255, 170, 0.2);
+            transform: rotate(45deg); 
+            animation: cyber-glow 3s ease-in-out infinite;
+        }
 
+        .cyber-badge::after {
+            content: "🎮";
+            font-size: 38px;
+            transform: rotate(-45deg); 
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+        }
+
+        .cyber-badge::before {
+            content: "";
+            position: absolute;
+            top: -8px; left: -8px; right: -8px; bottom: -8px;
+            border: 1px dashed rgba(0, 119, 255, 0.6);
+            border-radius: 24px;
+            animation: spin-slow 12s linear infinite;
+        }
+
+        @keyframes cyber-glow {
+            0% { transform: rotate(45deg) translateY(0px); box-shadow: 0 0 20px rgba(0, 255, 170, 0.4); border-color: #00ffaa; }
+            50% { transform: rotate(45deg) translateY(-6px); box-shadow: 0 0 35px rgba(0, 119, 255, 0.7); border-color: #0077ff; }
+            100% { transform: rotate(45deg) translateY(0px); box-shadow: 0 0 20px rgba(0, 255, 170, 0.4); border-color: #00ffaa; }
+        }
+
+        @keyframes spin-slow {
+            100% { transform: rotate(360deg); }
+        }
+
+        .main-title {
+            font-size: 26px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 14px;
+            letter-spacing: -0.5px;
+        }
+
+        .main-title span {
+            background: linear-gradient(90deg, #ff9900, #ff5500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sub-title {
+            font-size: 14px;
+            color: #b3acc9;
+            line-height: 1.5;
+            padding: 0 10px;
+        }
+
+        /* 操作表单区 */
+        .action-container {
+            background: rgba(21, 15, 48, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 18px;
+            padding: 20px;
+        }
+
+        .input-label {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #00ffaa;
+            margin-bottom: 12px;
+            display: block;
+        }
+        [dir="rtl"] .input-label { text-align: right; }
+        [dir="ltr"] .input-label { text-align: left; }
+
+        /* 自适应输入框组件 */
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #0d091f;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .input-group:focus-within {
+            border-color: #00ffaa;
+            box-shadow: 0 0 15px rgba(0, 255, 170, 0.15);
+        }
+
+        .prefix-container {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 14px;
+            height: 100%;
+            background: rgba(255,255,255,0.02);
+            pointer-events: none;
+        }
+        
+        [dir="rtl"] .prefix-container {
+            right: 0;
+            left: auto;
+            border-left: 1px solid rgba(255,255,255,0.05);
+            flex-direction: row; 
+        }
+        [dir="ltr"] .prefix-container {
+            left: 0;
+            right: auto;
+            border-right: 1px solid rgba(255,255,255,0.05);
+            flex-direction: row-reverse;
+        }
+
+        .flag-icon {
+            width: 22px;
+            height: auto;
+            border-radius: 2px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .prefix-text {
+            font-weight: 700;
+            font-size: 15px;
+            color: #8a82a5;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            outline: none;
+            letter-spacing: 1px;
+        }
+        [dir="rtl"] input {
+            padding-right: 100px;
+            padding-left: 16px;
+            text-align: right;
+        }
+        [dir="ltr"] input {
+            padding-left: 100px;
+            padding-right: 16px;
+            text-align: left;
+        }
+
+        #pin {
+            padding: 16px !important;
+            text-align: center !important;
+            font-size: 22px;
+            letter-spacing: 6px;
+        }
+
+        button.submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, #00ffaa 0%, #0077ff 100%);
+            border: none;
+            border-radius: 12px;
+            color: #05030d;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 255, 170, 0.25);
+            margin-top: 16px;
+        }
+
+        button.submit-btn:hover {
+            box-shadow: 0 6px 25px rgba(0, 255, 170, 0.35);
+        }
+
+        .price-notice {
+            margin-top: 14px;
+            font-size: 13px;
+            color: #a49cb9;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .price-notice span {
+            color: #00ffaa;
+        }
+
+        #verifySection {
+            display: none;
+        }
+
+        /* 条款强行下移空白垫 */
+        .spacer-block {
+            height: 160px;
+            width: 100%;
+        }
+
+        .disclaimer-box {
+            width: 100%;
+            max-width: 450px;
+            font-size: 11px;
+            color: #4a4363;
+            line-height: 1.6;
+            text-align: justify;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 20px 10px;
+        }
+
+        pre {
+            display: none !important;
+        }
+    </style>
 </head>
-
 <body>
 
-<h1>Gameonz UAE</h1>
+    <div class="container">
+        
+        <button class="lang-switcher" id="langBtn" onclick="toggleLanguage()">EN</button>
+        
+        <div class="logo-container">
+            <img src="https://i.ibb.co/zWRBnNDB/gameonz-logo.png" alt="Gameonz Logo" class="service-logo">
+        </div>
 
-<p>
-Enter your mobile number to receive a PIN.
-</p>
+        <div class="hero-showcase">
+            <div class="cyber-badge"></div>
+            <h1 class="main-title" id="mainTitle">أطلق العنان لـ <span>+1000 من الألعاب المميزة</span></h1>
+            <p class="sub-title" id="statusText">احصل على تذكرتك الذهبية للوصول الكامل مجاناً لمدة 24 ساعة الآن. العب أشهر ألعاب الأكشن، السباقات، والرياضة العالمية مجاناً بالكامل. يمكنك الإلغاء في أي وقت بضغطة واحدة وبدون أي التزامات!</p>
+        </div>
 
-<div id="requestSection">
+        <div class="action-container">
+            
+            <div id="requestSection">
+                <label class="input-label" id="inputLabel">أدخل رقم الهاتف المتحرك</label>
+                <div class="input-group">
+                    <div class="prefix-container">
+                        <span class="prefix-text">+971</span>
+                        <img src="https://flagcdn.com/w40/ae.png" alt="UAE Flag" class="flag-icon">
+                    </div>
+                    <input type="tel" id="msisdn" placeholder="5XXXXXXXX" maxlength="9" autocomplete="off" />
+                </div>
+                <button class="submit-btn" id="submitBtn" onclick="requestPin()">ابدأ الفترة التجريبية المجانية</button>
+                
+                <div class="price-notice" id="priceNotice">
+                    فترة تجريبية مجانية لمدة 24 ساعة، ثم <span>3.25 درهم إماراتي / يومياً</span>
+                </div>
+            </div>
 
-<input
-id="msisdn"
-placeholder="561234567"
-/>
+            <div id="verifySection">
+                <label class="input-label" id="verifyLabel" style="color: #0077ff;">أدخل رمز PIN المكون من 4 أرقام</label>
+                <div class="input-group">
+                    <input type="text" id="pin" placeholder="••••" maxlength="4" autocomplete="off" />
+                </div>
+                <button class="submit-btn" id="verifyBtn" style="background: linear-gradient(90deg, #0077ff 0%, #00ffaa 100%);" onclick="verifyPin()">تأكيد وتفعيل الاشتراك</button>
+                
+                <div class="price-notice" id="priceNoticeVerify">
+                    تكلفة الخدمة: <span>3.25 درهم / يومياً</span> بعد الفترة التجريبية
+                </div>
+            </div>
 
-<button onclick="requestPin()">
-Request PIN
-</button>
+        </div>
 
-</div>
+        <pre id="result"></pre>
+    </div>
 
-<div id="verifySection">
+    <div class="spacer-block"></div>
 
-<input
-id="pin"
-placeholder="Enter PIN"
-/>
+    <div class="disclaimer-box" id="disclaimerBox">
+        الشروط والأحكام: بدون أي التزامات، يمكنك إلغاء اشتراكك في أي وقت عن طريق إرسال STOP GD إلى 1741. استمتع بفترة تجريبية مجانية لمدة 24 ساعة. السعر بعد الفترة التجريبية هو 3.25 درهم إماراتي/يوميًا (شامل ضريبة القيمة المضافة).
+    </div>
 
-<button onclick="verifyPin()">
-Verify PIN
-</button>
+    <script>
+        let currentLang = 'ar'; 
 
-</div>
+        // 完美嵌入您选中的高转化广告文案 [cite: 1, 2]
+        const langData = {
+            ar: {
+                htmlDir: 'rtl',
+                htmlLang: 'ar',
+                btnText: 'EN',
+                mainTitle: 'أطلق العنان لـ <span>+1000 من الألعاب المميزة</span>',
+                statusText: 'احصل على تذكرتك الذهبية للوصول الكامل مجاناً لمدة 24 ساعة الآن. العب أشهر ألعاب الأكشن، السباقات، والرياضة العالمية مجاناً بالكامل. يمكنك الإلغاء في أي وقت بضغطة واحدة وبدون أي التزامات!',
+                inputLabel: 'أدخل رقم الهاتف المتحرك',
+                submitBtn: 'ابدأ الفترة التجريبية المجانية',
+                priceNotice: 'فترة تجريبية مجانية لمدة 24 ساعة، ثم <span>3.25 درهم إماراتي / يومياً</span>',
+                verifyLabel: 'أدخل رمز PIN المكون من 4 أرقام',
+                verifyBtn: 'تأكيد وتفعيل الاشتراك',
+                priceNoticeVerify: 'تكلفة الخدمة: <span>3.25 درهم / يومياً</span> بعد الفترة التجريبية',
+                disclaimer: 'الشروط والأحكام: بدون أي التزامات، يمكنك إلغاء اشتراكك في أي وقت عن طريق إرسال STOP GD إلى 1741. استمتع بفترة تجريبية مجانية لمدة 24 ساعة. السعر بعد الفترة التجريبية هو 3.25 درهم إماراتي/يوميًا (شامل ضريبة القيمة المضافة).',
+                jsAlertMsisdn: 'يرجى إدخال رقم اتصالات صحيح مكون من 9 أرقام يبدأ بـ 5 (مثال: 50XXXXXXX)',
+                jsAlertPin: 'يرجى إدخال رمز PIN المكون من 4 أرقام',
+                jsStatusLoading: 'جاري الاتصال ببوابة اتصالات الآمنة...',
+                jsStatusVerify: 'جاري التحقق من رمز الاشتراك...'
+            },
+            en: {
+                htmlDir: 'ltr',
+                htmlLang: 'en',
+                btnText: 'AR',
+                mainTitle: 'UNLOCK <span>1000+ PREMIUM GAMES</span>',
+                statusText: 'Claim your 24-Hour VIP Full-Access Pass right now. Play the world\'s most trending action, racing, and sports games completely free. Cancel anytime with a single click — no commitment!',
+                inputLabel: 'Enter Mobile Number',
+                submitBtn: 'Start 24H Free Trial',
+                priceNotice: '24-Hour Free trial, then <span>AED 3.25 / Daily</span>',
+                verifyLabel: 'Enter 4-Digit PIN Code',
+                verifyBtn: 'Confirm & Activate Access',
+                priceNoticeVerify: 'Price: <span>AED 3.25 / Daily</span> (inc. VAT) after free trial',
+                disclaimer: 'TERMS AND CONDITIONS: No commitment, you can cancel your subscription at any time by sending STOP GD to 1741. Enjoy your Free trial for 24 hours. Price after free trial is AED 3.25/Daily (inc. VAT).',
+                jsAlertMsisdn: 'Please enter a valid 9-digit Etisalat number starting with 5 (e.g., 50XXXXXXX).',
+                jsAlertPin: 'Please enter the 4-digit PIN code you received.',
+                jsStatusLoading: 'Connecting to Etisalat Secure Gateway...',
+                jsStatusVerify: 'Authorizing subscription token...'
+            }
+        };
 
-<pre id="result"></pre>
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            const data = langData[currentLang];
 
-<script src="lander.js"></script>
+            // 触发布局与朝向镜像对调
+            document.getElementById('htmlTag').setAttribute('dir', data.htmlDir);
+            document.getElementById('htmlTag').setAttribute('lang', data.htmlLang);
+            
+            // 实时洗稿式文案渲染
+            document.getElementById('langBtn').innerText = data.btnText;
+            document.getElementById('mainTitle').innerHTML = data.mainTitle;
+            document.getElementById('statusText').innerHTML = data.statusText;
+            document.getElementById('inputLabel').innerText = data.inputLabel;
+            document.getElementById('submitBtn').innerText = data.submitBtn;
+            document.getElementById('priceNotice').innerHTML = data.priceNotice;
+            document.getElementById('verifyLabel').innerText = data.verifyLabel;
+            document.getElementById('verifyBtn').innerText = data.verifyBtn;
+            document.getElementById('priceNoticeVerify').innerHTML = data.priceNoticeVerify;
+            document.getElementById('disclaimerBox').innerText = data.disclaimer;
+            
+            // 绑定至全局，确保 lander.js 异步提示同步换词
+            window.currentLangDictionary = data;
+        }
 
+        // 初始化阿拉伯语数据字典
+        window.currentLangDictionary = langData['ar'];
+    </script>
+    <script src="lander.js"></script>
 </body>
 </html>
