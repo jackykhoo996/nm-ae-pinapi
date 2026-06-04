@@ -1,54 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>PIN API Test</title>
+<meta charset="UTF-8">
+<title>Gameonz UAE</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    max-width:500px;
+    margin:40px auto;
+    padding:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+}
+
+#verifySection{
+    display:none;
+}
+
+pre{
+    background:#f5f5f5;
+    padding:10px;
+    overflow:auto;
+}
+
+</style>
+
 </head>
+
 <body>
 
-<h1>PIN Request Test</h1>
+<h1>Gameonz UAE</h1>
+
+<p>
+Enter your mobile number to receive a PIN.
+</p>
+
+<div id="requestSection">
 
 <input
- id="msisdn"
- placeholder="9715xxxxxxx"
+id="msisdn"
+placeholder="561234567"
 />
 
-<button onclick="sendPin()">
+<button onclick="requestPin()">
 Request PIN
 </button>
 
+</div>
+
+<div id="verifySection">
+
+<input
+id="pin"
+placeholder="Enter PIN"
+/>
+
+<button onclick="verifyPin()">
+Verify PIN
+</button>
+
+</div>
+
 <pre id="result"></pre>
 
-<script>
-
-async function sendPin() {
-
- const msisdn =
- document.getElementById("msisdn").value;
-
- const response = await fetch(
-   "/api/request",
-   {
-     method:"POST",
-     headers:{
-       "Content-Type":"application/json"
-     },
-     body:JSON.stringify({
-       msisdn,
-       click_id:"test123"
-     })
-   }
- );
-
- const data =
- await response.json();
-
- document.getElementById("result")
- .innerText =
- JSON.stringify(data,null,2);
-
-}
-
-</script>
+<script src="lander.js"></script>
 
 </body>
 </html>
