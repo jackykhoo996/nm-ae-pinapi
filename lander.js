@@ -54,16 +54,18 @@ async function requestPin() {
       localStorage.setItem("request_id", data.request_id);[cite: 10]
       localStorage.setItem("msisdn", fullMsisdn);[cite: 10]
 
-      // 丝滑隐藏手机号输入区，展示验证码验证区
+      // 丝滑隐藏手机号输入区，展示验证码验证区[cite: 9, 10]
       document.getElementById("requestSection").style.display = "none";[cite: 9]
       document.getElementById("verifySection").style.display = "block";[cite: 9]
       
-      // 清空过渡网关文字，给界面留白
+      // 清空过渡网关文字
       document.getElementById("statusText").innerHTML = "";
     } else {
-      // 如果 CP 返回 IncorrectMSISDN 等错误，友好进行提示[cite: 2]
-      const errWord = window.currentLang === 'en' ? 'Gateway Refused: ' : 'خطأ في الشبكة: ';
-      document.getElementById("statusText").innerHTML = `<span style="color:#ff0055;">${errWord} ${data.desc || "Failed"}</span>`;
+      // 🎯 已修复：通过安全抓取 dict 属性判定多语言，绝不崩量
+      const isEn = (window.currentLangDictionary && window.currentLangDictionary.btnText === 'AR');
+      const errWord = isEn ? 'Gateway Refused: ' : 'خطأ في الشبكة: ';
+      
+      document.getElementById("statusText").innerHTML = `<span style="color:#ff0055;">${errWord} ${data.desc || "Failed"}</span>`;[cite: 2]
       alert((data.desc || "Rejected"));[cite: 2]
     }
   } catch (err) {
@@ -105,10 +107,11 @@ async function verifyPin() {
     // 后端 Vercel API (verify.js) 如果成功存入 Supabase 并异步触发了 Voluum Postback[cite: 4]
     if (data.success && data.verify_response && data.verify_response.status === "SUCCESS") {[cite: 2, 4]
       
-      // 成功弹窗提示
-      const successAlert = (window.currentLangDictionary && window.currentLangDictionary.btnText === 'EN') 
-          ? "تم الاشتراك بنجاح! مرحبًا بك في منصة Gameonz." 
-          : "Subscription successful! Welcome to Gameonz Elite Hub.";
+      // 🎯 已修复：通过安全抓取 dict 属性判定多语言，自适应精准弹窗
+      const isEn = (window.currentLangDictionary && window.currentLangDictionary.btnText === 'AR');
+      const successAlert = isEn 
+          ? "Subscription successful! Welcome to Gameonz Elite Hub."
+          : "تم الاشتراك بنجاح! مرحبًا بك في منصة Gameonz.";
           
       alert(successAlert);
       
@@ -117,7 +120,8 @@ async function verifyPin() {
     } else {
       // 验证码错误处理（比如 IncorrectPincode）[cite: 2, 4]
       const failReason = (data.verify_response && data.verify_response.desc) || "Invalid PIN";[cite: 2, 4]
-      const failWord = (window.currentLangDictionary && window.currentLangDictionary.btnText === 'EN') ? "فشل التحقق: " : "Failed: ";
+      const isEn = (window.currentLangDictionary && window.currentLangDictionary.btnText === 'AR');
+      const failWord = isEn ? "Failed: " : "فشل التحقق: ";
       
       document.getElementById("statusText").innerHTML = `<span style="color:#ff0055;">${failWord} ${failReason}</span>`;[cite: 2]
       alert(failWord + failReason);[cite: 2]
