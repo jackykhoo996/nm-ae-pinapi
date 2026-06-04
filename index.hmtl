@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PIN API Test</title>
+</head>
+<body>
+
+<h1>PIN Request Test</h1>
+
+<input
+ id="msisdn"
+ placeholder="9715xxxxxxx"
+/>
+
+<button onclick="sendPin()">
+Request PIN
+</button>
+
+<pre id="result"></pre>
+
+<script>
+
+async function sendPin() {
+
+ const msisdn =
+ document.getElementById("msisdn").value;
+
+ const response = await fetch(
+   "/api/request",
+   {
+     method:"POST",
+     headers:{
+       "Content-Type":"application/json"
+     },
+     body:JSON.stringify({
+       msisdn,
+       click_id:"test123"
+     })
+   }
+ );
+
+ const data =
+ await response.json();
+
+ document.getElementById("result")
+ .innerText =
+ JSON.stringify(data,null,2);
+
+}
+
+</script>
+
+</body>
+</html>
